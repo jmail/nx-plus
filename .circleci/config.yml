@@ -1,0 +1,45 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.0.0
+jobs:
+  all:
+    docker:
+      - image: cypress/base:16.14.0
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn format:check --all
+      - run: yarn affected:lint --all
+      - run: yarn affected:test --all
+      - run:
+          command: yarn affected:e2e --all
+          no_output_timeout: 40m
+  affected:
+    docker:
+      - image: cypress/base:16.14.0
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn format:check --base origin/master --head HEAD
+      - run: yarn affected:lint --base origin/master --head HEAD
+      - run: yarn affected:test --base origin/master --head HEAD
+      - run:
+          command: yarn affected:e2e --base origin/master --head HEAD
+          no_output_timeout: 40m
+
+workflows:
+  version: 2
+  default:
+    jobs:
+      - all:
+          filters:
+            branches:
+              only:
+                - master
+      - affected:
+          filters:
+            branches:
+              ignore:
+                - master
