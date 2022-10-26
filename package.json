@@ -1,5 +1,5 @@
 {
-  "name": "nx-plus",
+  "name": "nx-plus-vue",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -27,7 +27,7 @@
     "update": "nx migrate latest",
     "update-playground": "ts-node tools/scripts/update-playground.ts",
     "workspace-generator": "nx workspace-generator",
-    "postinstall": "node node_modules/@nx-plus/vue/patch-nx-dep-graph.js"
+    "postinstall": "node libs/vue/patch-nx-dep-graph.js"
   },
   "dependencies": {
     "@nrwl/remix": "^14.7.0",
